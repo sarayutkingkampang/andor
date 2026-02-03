@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ใบงาน การต่อวงจรไฟกระพริบ (Logic Gate)</title>
+    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Sarabun', sans-serif;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 20px;
+            color: #333;
+        }
+        .container {
+            max-width: 210mm; /* ขนาดกระดาษ A4 */
+            margin: 0 auto;
+            background: white;
+            padding: 20mm;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            min-height: 297mm;
+        }
+        h1 {
+            text-align: center;
+            font-size: 20pt;
+            margin-bottom: 25px;
+            color: #000;
+        }
+        h2, h3 {
+            color: #444;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 10px;
+        }
+        /* ส่วนข้อมูลนักเรียน */
+        .header-info {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 25px;
+            padding: 15px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+        }
+        label {
+            font-weight: bold;
+            display: block;
+            margin-bottom: 5px;
+        }
+        input[type="text"], textarea, select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-family: inherit;
+            box-sizing: border-box;
+        }
+        .box-section {
+            margin-bottom: 25px;
+        }
+        ul, ol {
+            margin-top: 5px;
+            line-height: 1.6;
+        }
+        /* กรอบใส่รูปภาพ */
+        .diagram-box {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 10px 0 20px 0;
+            border: 1px solid #eee; /* กรอบบางๆ ให้รู้ขอบเขต */
+            padding: 10px;
+            border-radius: 5px;
+        }
+        /* ตารางบันทึกผล */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+        th, td {
+            border: 1px solid #999;
+            padding: 10px;
+            text-align: center;
+        }
+        th {
+            background-color: #e0e0e0;
+        }
+        /* ปุ่มสั่งพิมพ์ */
+        .btn-print {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            background-color: #007bff;
+            color: white;
+            font-size: 1.2rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 40px;
+            text-align: center;
+            font-family: 'Sarabun', sans-serif;
+        }
+        .btn-print:hover {
+            background-color: #0056b3;
+        }
+        
+        /* การตั้งค่าสำหรับการพิมพ์ (Print) */
+        @media print {
+            body { background: white; padding: 0; }
+            .container { box-shadow: none; width: 100%; margin: 0; padding: 0; }
+            .btn-print { display: none; }
+            input, textarea, select { border: none; border-bottom: 1px solid #000; resize: none; }
+            select { appearance: none; -webkit-appearance: none; }
+            .diagram-box { border: none; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>ใบงาน การต่อวงจรไฟกระพริบ</h1>
+
+    <div class="header-info">
+        <div>
+            <label>ชื่อ-นามสกุล:</label>
+            <input type="text" placeholder="ระบุชื่อจริง-นามสกุล">
+        </div>
+        <div>
+            <label>ชั้น/ห้อง:</label>
+            <input type="text" placeholder="เช่น ม.1/1">
+        </div>
+        <div>
+            <label>เลขที่:</label>
+            <input type="text" placeholder="ระบุเลขที่">
+        </div>
+    </div>
+
+    <div class="box-section">
+        <h3>1. วัตถุประสงค์ (Objectives)</h3>
+        <ul>
+            <li>เพื่อศึกษาและต่อวงจรไฟฟ้าแบบอนุกรม (Series) และแบบขนาน (Parallel)</li>
+            <li>เพื่อทำความเข้าใจหลักการทำงานของลอจิกเกตแบบ AND และ OR ผ่านอุปกรณ์จริง</li>
+        </ul>
+    </div>
+
+    <div class="box-section">
+        <h3>2. เครื่องมือและอุปกรณ์ (Materials & Equipment)</h3>
+        <ul>
+            <li>ตัวต้านทาน 330 Ω (R1, R4) จำนวน 2 ตัว</li>
+            <li>หลอด LED (ต่างสีกัน) จำนวน 2 ตัว</li>
+            <li>สวิตช์ปุ่มกด (Push Button) จำนวน 2 ตัว</li>
+            <li>แผงต่อวงจร (Protoboard) และสายจั๊ม</li>
+            <li>แหล่งจ่ายไฟ DC 9V</li>
+        </ul>
+    </div>
+
+    <div class="box-section">
+        <h3>3. วงจรการทดลอง (Schematic Diagram)</h3>
+        
+        <p><strong>รูปที่ 1: วงจร AND Gate (อนุกรม)</strong></p>
+        <div class="diagram-box">
+            <img src="circuit_and.jpg" style="max-width: 100%; max-height: 350px;" alt="รูปวงจร AND (ไม่พบไฟล์ circuit_and.jpg)">
+        </div>
+
+        <p><strong>รูปที่ 2: วงจร OR Gate (ขนาน)</strong></p>
+        <div class="diagram-box">
+            <img src="circuit_or.jpg" style="max-width: 100%; max-height: 350px;" alt="รูปวงจร OR (ไม่พบไฟล์ circuit_or.jpg)">
+        </div>
+    </div>
+
+    <hr>
+
+    <h2>4. ลำดับขั้นการทดลอง</h2>
+
+    <div class="box-section">
+        <h3>ตอนที่ 1: วงจร AND Gate (การต่อแบบอนุกรม)</h3>
+        <p><strong>คำอธิบาย:</strong> วงจรนี้เปรียบเสมือน "ด่านตรวจ" ที่ต้องผ่านเงื่อนไขให้ครบทุกด่าน ไฟถึงจะติด</p>
+        
+        <div style="background: #eef; padding: 15px; border-radius: 5px;">
+            <strong>วิธีการต่อวงจร:</strong>
+            <ol>
+                <li>ต่อไฟบวก (+5V) เข้าขาข้างหนึ่งของ <b>ปุ่มกด A</b></li>
+                <li>นำขาอีกข้างของปุ่มกด A ไปต่อเข้ากับขาเข้าของ <b>ปุ่มกด B</b></li>
+                <li>นำขาออกของปุ่มกด B ไปต่อกับ <b>ตัวต้านทาน 220 Ω</b></li>
+                <li>ต่อปลายตัวต้านทานเข้า <b>ขาบวก (+) LED</b> และต่อ <b>ขาลบ (-) LED</b> ลงกราวด์</li>
+            </ol>
+        </div>
+
+        <h4>ตารางบันทึกผล (Truth Table)</h4>
+        <table>
+            <thead>
+                <tr>
+                    <th>การกระทำที่ปุ่ม A</th>
+                    <th>การกระทำที่ปุ่ม B</th>
+                    <th>ผลลัพธ์ที่หลอด LED</th>
+                    <th>สรุปทางตรรกะ (0/1)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>ไม่กด (0)</td>
+                    <td>ไม่กด (0)</td>
+                    <td>
+                        <select onchange="updateLogic(this, 'and_logic_1', '0 AND 0 = ')">
+                            <option value="">--เลือก--</option>
+                            <option value="0">ดับ</option>
+                            <option value="1">ติด</option>
+                        </select>
+                    </td>
+                    <td id="and_logic_1">0 AND 0 = ...</td>
+                </tr>
+                <tr>
+                    <td>ไม่กด (0)</td>
+                    <td>กด (1)</td>
+                    <td>
+                        <select onchange="updateLogic(this, 'and_logic_2', '0 AND 1 = ')">
+                            <option value="">--เลือก--</option>
+                            <option value="0">ดับ</option>
+                            <option value="1">ติด</option>
+                        </select>
+                    </td>
+                    <td id="and_logic_2">0 AND 1 = ...</td>
+                </tr>
+                <tr>
+                    <td>กด (1)</td>
+                    <td>ไม่กด (0)</td>
+                    <td>
+                        <select onchange="updateLogic(this, 'and_logic_3', '1 AND 0 = ')">
+                            <option value="">--เลือก--</option>
+                            <option value="0">ดับ</option>
+                            <option value="1">ติด</option>
+                        </select>
+                    </td>
+                    <td id="and_logic_3">1 AND 0 = ...</td>
+                </tr>
+                <tr>
+                    <td>กด (1)</td>
+                    <td>กด (1)</td>
+                    <td>
+                        <select onchange="updateLogic(this, 'and_logic_4', '1 AND 1 = ')">
+                            <option value="">--เลือก--</option>
+                            <option value="0">ดับ</option>
+                            <option value="1">ติด</option>
+                        </select>
+                    </td>
+                    <td id="and_logic_4">1 AND 1 = ...</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="box-section">
+        <h3>ตอนที่ 2: วงจร OR Gate (การต่อแบบขนาน)</h3>
+        <p><strong>คำอธิบาย:</strong> วงจรนี้เปรียบเสมือน "ทางเลือก" ไม่ว่าจะมาทางไหน ก็ไปถึงจุดหมายได้</p>
+        
+        <div style="background: #eef; padding: 15px; border-radius: 5px;">
+            <strong>วิธีการต่อวงจร:</strong>
+            <ol>
+                <li>ต่อไฟบวก (+5V) เข้าขาเข้าของ <b>ปุ่มกด A</b> และ <b>ปุ่มกด B</b> (จุดเริ่มต้นเดียวกัน)</li>
+                <li>นำขาออกของ <b>ปุ่มกด A</b> และ <b>ปุ่มกด B</b> มารวมกันที่จุดเดียวกัน</li>
+                <li>จากจุดรวม ให้ต่อเข้ากับ <b>ตัวต้านทาน 220 Ω</b></li>
+                <li>ต่อปลายตัวต้านทานเข้า <b>ขาบวก (+) LED</b> และต่อ <b>ขาลบ (-) LED</b> ลงกราวด์</li>
+            </ol>
+        </div>
+
+        <h4>ตารางบันทึกผล (Truth Table)</h4>
+        <table>
+            <thead>
+                <tr>
+                    <th>การกระทำที่ปุ่ม A</th>
+                    <th>การกระทำที่ปุ่ม B</th>
+                    <th>ผลลัพธ์ที่หลอด LED</th>
+                    <th>สรุปทางตรรกะ (0/1)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>ไม่กด (0)</td>
+                    <td>ไม่กด (0)</td>
+                    <td>
+                        <select onchange="updateLogic(this, 'or_logic_1', '0 OR 0 = ')">
+                            <option value="">--เลือก--</option>
+                            <option value="0">ดับ</option>
+                            <option value="1">ติด</option>
+                        </select>
+                    </td>
+                    <td id="or_logic_1">0 OR 0 = ...</td>
+                </tr>
+                <tr>
+                    <td>ไม่กด (0)</td>
+                    <td>กด (1)</td>
+                    <td>
+                        <select onchange="updateLogic(this, 'or_logic_2', '0 OR 1 = ')">
+                            <option value="">--เลือก--</option>
+                            <option value="0">ดับ</option>
+                            <option value="1">ติด</option>
+                        </select>
+                    </td>
+                    <td id="or_logic_2">0 OR 1 = ...</td>
+                </tr>
+                <tr>
+                    <td>กด (1)</td>
+                    <td>ไม่กด (0)</td>
+                    <td>
+                        <select onchange="updateLogic(this, 'or_logic_3', '1 OR 0 = ')">
+                            <option value="">--เลือก--</option>
+                            <option value="0">ดับ</option>
+                            <option value="1">ติด</option>
+                        </select>
+                    </td>
+                    <td id="or_logic_3">1 OR 0 = ...</td>
+                </tr>
+                <tr>
+                    <td>กด (1)</td>
+                    <td>กด (1)</td>
+                    <td>
+                        <select onchange="updateLogic(this, 'or_logic_4', '1 OR 1 = ')">
+                            <option value="">--เลือก--</option>
+                            <option value="0">ดับ</option>
+                            <option value="1">ติด</option>
+                        </select>
+                    </td>
+                    <td id="or_logic_4">1 OR 1 = ...</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="box-section">
+        <h3>5. สรุปและคำถามท้ายการทดลอง</h3>
+        
+        <label>1. เปรียบเทียบความแตกต่าง: ในวงจร AND (อนุกรม) ถ้าปุ่มใดปุ่มหนึ่งเสีย (กดไม่ติด) วงจรจะทำงานได้หรือไม่? เพราะเหตุใด?</label>
+        <textarea rows="4" placeholder="ตอบคำถาม..."></textarea>
+        <br><br>
+        
+        <label>2. การประยุกต์ใช้: จงยกตัวอย่างสิ่งของในชีวิตประจำวันที่ทำงานแบบ OR Gate (กดสวิตช์ไหนเครื่องก็ทำงาน)</label>
+        <textarea rows="4" placeholder="ตอบคำถาม..."></textarea>
+    </div>
+
+    <button class="btn-print" onclick="window.print()">บันทึก PDF / พิมพ์ใบงาน</button>
+
+</div>
+
+<script>
+    // Script ช่วยแสดงผลลัพธ์ Logic อัตโนมัติ
+    function updateLogic(selectObj, targetId, prefix) {
+        var val = selectObj.value;
+        var text = "";
+        var target = document.getElementById(targetId);
+        
+        if(val === "1") {
+            text = prefix + "1";
+            target.style.color = "green";
+            target.style.fontWeight = "bold";
+        } else if (val === "0") {
+            text = prefix + "0";
+            target.style.color = "red";
+            target.style.fontWeight = "bold";
+        } else {
+            text = prefix + "...";
+            target.style.color = "#333";
+            target.style.fontWeight = "normal";
+        }
+        target.innerText = text;
+    }
+</script>
+
+</body>
+</html>
